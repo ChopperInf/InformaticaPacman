@@ -1,0 +1,9 @@
+classDiagram
+    Pac-man : +Pacman ()
+    Pac-man : +Pacman(int x, int y)    
+    Pac-man: +String to strig ()
+    Pac-man: +bool muovi(int spostax=0, int spostay=0)
+    Pac-man: - int x, y         //dichiarazione delle cordinate x,y
+    Pac-man: - int colore       //colore del pacman
+    Pac-man: - char forma       //dimensione del pacman
+   
