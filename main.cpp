@@ -2,7 +2,7 @@
 #include "Frutta.h"
 #include "Pacman.h"
 #include "PallinoClass.h"
-#include ""
+#include "Fantasma.h"
 using namespace std;
 
 int main() {
