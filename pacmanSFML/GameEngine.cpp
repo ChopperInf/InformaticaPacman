@@ -52,13 +52,14 @@ GameEngine::GameEngine(InterfacciaUtente& ui, wstring nomeGiocatore)
 }
 
 void GameEngine::run() {
-	// inizializza random per movimento fantasma
-	srand(static_cast<unsigned int>(time(nullptr)));
+    // inizializza random per movimento fantasma
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     bool finito = false;
 
-	int larghezzaCampo = ui.getLarghezza();
-	int altezzaCampo = ui.getAltezza();
+    int larghezzaCampo = ui.getLarghezza();
+    int altezzaCampo = ui.getAltezza();
+
     // ── Game loop ─────────────────────────────────────────────
     while (!finito)
     {
@@ -78,10 +79,40 @@ void GameEngine::run() {
         if (tasto == TASTO_DESTRA)
             pacMan.sposta(PASSO_TASTO, 0.0f, larghezzaCampo, altezzaCampo);
 
-        // ── Spostamento legato alla velocità ────────────────
-        fantasma.muoviRandomConRimbalzoBordi(larghezzaCampo, altezzaCampo);
+        // ── Spostamento legato alla velocità (Inseguimento) ──
+        fantasma.muoviInseguimento(pacMan, larghezzaCampo, altezzaCampo);
 
-        // ── Rendering ─────────────────────────────────────────
+        // ── Controllo Morte / Game Over ────────────────────────────────────
+        float distX = pacMan.getX() - fantasma.getX();
+        float distY = pacMan.getY() - fantasma.getY();
+
+        // Tolgo il meno se la distanza è negativa
+        if (distX < 0) {
+            distX = -distX;
+        }
+        if (distY < 0) {
+            distY = -distY;
+        }
+
+        // Il limite per toccarsi è il raggio per due
+        float limite = pacMan.getRaggio() * 2.0f;
+
+        // Se le distanze sono minori del limite, c'è lo scontro
+        if (distX < limite && distY < limite) {
+
+            ui.pulisci();
+            aggiungiSfondo();
+            ui.aggiungiTestoAlCentro(12, L"SEI STATO MANGIATO DAL FANTASMA!");
+            ui.aggiungiTestoAlCentro(14, L"=== GAME OVER ===");
+            ui.disegna();
+
+            ui.sleep(3000); // Pausa di 3 secondi
+
+            finito = true;
+            break; // Salta il resto del codice ed esce subito dal while
+        }
+
+        // ── Rendering (avviene solo se non c'è stato Game Over) ──
         ui.pulisci();
 
         aggiungiSfondo();
@@ -96,7 +127,6 @@ void GameEngine::run() {
         ui.sleep(RITARDO_MS);
     }
 }
-
 void GameEngine::aggiungiSfondo() {
     // Bordo decorativo
     ui.aggiungiRettangoloVuoto(Punto(2, 2),

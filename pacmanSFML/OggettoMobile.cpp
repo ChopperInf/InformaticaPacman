@@ -235,7 +235,44 @@ void OggettoMobile::muoviRandomConRimbalzoBordi(int larghezza, int altezza)
         rimbalzaY();
     }
 }
+void OggettoMobile::muoviInseguimento(OggettoMobile& bersaglio, int larghezza, int altezza)
+{
+    float dx = bersaglio.getX() - this->centroX;
+    float dy = bersaglio.getY() - this->centroY;
 
+    // Calcolo le distanze positive a mano
+    float distPositivaX = dx;
+    if (distPositivaX < 0) distPositivaX = -distPositivaX;
+
+    float distPositivaY = dy;
+    if (distPositivaY < 0) distPositivaY = -distPositivaY;
+
+    this->spostX = 0.0f;
+    this->spostY = 0.0f;
+
+    // Se è più lontano in orizzontale, mi muovo sull'asse X
+    if (distPositivaX > distPositivaY) {
+        if (dx > 0) {
+            this->spostX = this->velocita;
+        }
+        else {
+            this->spostX = -this->velocita;
+        }
+    }
+    // Altrimenti mi muovo sull'asse Y
+    else {
+        if (dy > 0) {
+            this->spostY = this->velocita;
+        }
+        else {
+            this->spostY = -this->velocita;
+        }
+    }
+
+    this->centroX += this->spostX;
+    this->centroY += this->spostY;
+    controllaPosizione(larghezza, altezza);
+}
 // ============================================================
 //  Disegno
 // ============================================================

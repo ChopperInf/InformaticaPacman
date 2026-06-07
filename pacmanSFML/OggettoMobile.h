@@ -70,6 +70,7 @@ public:
     // sui quattro bordi del campo (usa il raggio per uscire parzialmente).
     void muoviConRimbalzoBordi(int larghezza, int altezza);
     void muoviRandomConRimbalzoBordi(int larghezza, int altezza);
+    void muoviInseguimento(OggettoMobile& bersaglio, int lunghezza, int altezza);
 
     // ── Disegno ───────────────────────────────────────────────
 
