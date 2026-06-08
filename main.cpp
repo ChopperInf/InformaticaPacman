@@ -1,47 +1,98 @@
-#include <iostream>
-#include "Frutta.h"
-#include "Pacman.h"
-#include "PallinoClass.h"
-#include "Fantasma.h"
-using namespace std;
+﻿#include "Campo.h"
+#include "Tastiera.h"
+#include "InterfacciaUtente.h"
+#include "GameEngine.h"
 
-int main() {
-    srand(time(NULL));
+// ============================================================
+//  Costanti di gioco
+// ============================================================
 
-    Pacman p1(5, 10);
-	Frutta mela = Frutta(4, 2, 'O');
-	Pallino pallino(10, 5);
-    Fantasma f[] = {
-        Fantasma(10, 5, 12);
-        Fantasma(15, 5, 10);
-        Fantasma(20, 5, 15);
-        Fantasma(25, 5, 9);
-    };
+const int RIGA_TITOLO_MAIN = 1;
 
-    //PACMAN
-    p1.muovi(5, 10);
+const int RIGA_DOMANDA_NOME = 20;
+const int COL_DOMANDA_NOME = 4;
 
-    //FANTASMA
-    while (true) {
-        system("cls");
+const int RIGA_RISPOSTA_NOME = 22;
+const int COL_RISPOSTA_NOME = 4;
 
-        for (int i = 0; i < 4; i++) {
-            f[i].muovi();
-            f[i].disegna();
-        }
+// ============================================================
+//  main
+// ============================================================
+
+int main()
+{
+    // ── Campo e tastiera ──────────────────────────────────────
+    // creo il Campo su cui disegnare
+    Campo campo(LARGHEZZA_FINESTRA, ALTEZZA_FINESTRA,
+        L"Pacman — test",
+        "C:/Windows/Fonts/seguisym.ttf");   // glifi Unicode
+    // creo la Tastiera da cui ricevere l'input dell'utente
+    Tastiera tastiera(campo);
+    // inserisco Campo e Tastiera nella InterfacciaUtente
+    InterfacciaUtente ui(campo, tastiera);
+
+    // ------------------------------------------------------------
+    // Richiesta nome giocatore
+    // ------------------------------------------------------------
+    wstring nomeGiocatore;
+
+    nomeGiocatore = ui.leggiStringa(
+        Posizione(RIGA_RISPOSTA_NOME, COL_RISPOSTA_NOME),
+        Posizione(RIGA_DOMANDA_NOME, COL_DOMANDA_NOME),
+        L"Come ti chiami?"
+    );
+
+    if (nomeGiocatore == L"") {
+        nomeGiocatore = L"Giocatore";
     }
 
-    //PALLINO
-	cout << "Pallino creato a X: " << pallino.getX() << ", Y: " << pallino.getY() << endl;
-	cout << "E' gia' stato mangiato? " << pallino.IsMangiato() << endl;
-	cout << "Pac-Man passa e lo mangia" << endl;
-	pallino.mangia();
-	cout << "E' stato mangiato ora? " << pallino.IsMangiato() << endl;
+    // ------------------------------------------------------------
+    // Saluto al giocatore e Schermata istruzioni
+    // ------------------------------------------------------------
 
-    //FRUTTA
-	mela.setPosizione();
-	mela.visualizzaSuSchermo(10, 4);
-	cout << mela.toString();
+    ui.pulisci();
 
-	return 0;
+    ui.aggiungiTestoAlCentroRigCol(RIGA_TITOLO_MAIN, L"PACMAN - TEST INTERFACCIA");
+
+    ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME - 4, L"Benvenuto " + nomeGiocatore + L" !");
+    ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME - 2, L"Frecce    \u2192  sposta pacman SU/GIU/DESTRA/SINISTRA di 10 px");
+    ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME - 1, L"'a' e 'd' \u2192  accelera/decelera");
+    ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME, L"premi ESC per terminare");
+    ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME + 1, L"Premi un tasto per iniziare a giocare");
+    
+    ui.disegna();
+
+    ui.leggiTastoBloccante();
+
+    // ------------------------------------------------------------
+    // Avvio GameEngine
+    // ------------------------------------------------------------
+
+    GameEngine gioco(ui, nomeGiocatore);
+    gioco.run();
+
+    // ------------------------------------------------------------
+    // Saluto finale
+    // ------------------------------------------------------------
+
+    ui.pulisci();
+
+    ui.aggiungiTestoAlCentro(RIGA_TITOLO_MAIN, L"FINE TEST PACMAN");
+
+    ui.aggiungiTestoRigCol(Posizione(8, 8), L"Ciao ");
+    ui.aggiungiTestoRigCol(Posizione(8, 14), nomeGiocatore);
+
+    ui.aggiungiTestoRigCol(Posizione(14, 8), L"Premi ESC per terminare.");
+
+    ui.disegna();
+
+    // ------------------------------------------------------------
+    // Attesa del tasto ESC ogni altro tasto non ha effetto
+    // ------------------------------------------------------------
+    int tasto;
+    do {
+        tasto = ui.leggiTastoBloccante();
+    } while (campo.isAperta() && !ui.isEsc(tasto));
+
+    return 0;
 }
