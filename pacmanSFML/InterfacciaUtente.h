@@ -96,8 +96,8 @@ public:
         sf::Color colore,
         float spessore = 1.0f);
 
-    void aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX, float scalaY);
-    void aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX, float scalaY);
+    void aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX = 1.0f, float scalaY = 1, float angolo = 270.0f, int puntoRotaz = 0);
+    void aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX = 1.0f, float scalaY = 1, float angolo = 270.0f, int puntoRotaz = 0);
 
 	void sleep(int millisecondi);
 

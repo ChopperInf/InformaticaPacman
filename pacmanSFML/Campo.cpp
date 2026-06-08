@@ -13,7 +13,7 @@ Campo::Campo(
     this->altezzaPx = altezzaPx;
     this->dimFont = dimFont;
     this->coloreSfondo = sfondo;
-
+	this->angoloRotazione = 0.0f;
     finestra.create(
         sf::VideoMode(larghezzaPx, altezzaPx),
         sf::String(titolo)
@@ -36,6 +36,11 @@ float Campo::rigaToY(int riga) {
 
 void Campo::pulisci() {
     finestra.clear(coloreSfondo);
+}
+
+void Campo::ruota(float angoloDeg)
+{
+    this->angoloRotazione += angoloDeg;
 }
 
 // cancella un rettangolo con vertice in alto a sinistra in (x,y) 
@@ -244,24 +249,60 @@ void Campo::aggiungiRettangoloVuotoRigCol(Posizione angoloAltoSinistra,
 	aggiungiRettangoloVuoto(Punto(pixX, pixY), larghezzaPx, altezzaPx, colore, spessore);
 }
 
-void Campo::aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX, float scalaY)
+void Campo::aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX, float scalaY, float angolo, int puntoRotaz)
 {
     wstring testo;
 
     sf::Texture tex;
     tex.loadFromFile(nomeImmagine);
     tex.setSmooth(true);
-
     sf::Sprite sprite(tex);
+
+    // Rettangolo con le dimensioni locali dell'immagine
+    sf::FloatRect bounds = sprite.getLocalBounds();
+	// Imposta l'origine (punto di rotazione) in base al valore di puntoRotaz
+    switch (puntoRotaz) {
+        case CENTRO: 
+            sprite.setOrigin(bounds.width / 2, bounds.height / 2 );
+            break;
+        case ALTO:
+            sprite.setOrigin(bounds.width / 2, 0);
+            break;
+        case BASSO:
+            sprite.setOrigin(bounds.width / 2, bounds.height);
+            break;
+        case DESTRA:
+			sprite.setOrigin(bounds.width, bounds.height / 2);
+            break;
+        case SINISTRA:
+            sprite.setOrigin(0, bounds.height / 2);
+            break;
+    }
+
     sprite.setScale(scalaX, scalaY);
     sprite.setPosition(punto.getX(), punto.getY());
+    sprite.setRotation(angolo+90);
     this->finestra.draw(sprite);
+
+    /******* rettangolo di debug
+    sf::RectangleShape rect;
+    rect.setSize({ bounds.width, bounds.height });
+    rect.setOrigin(sprite.getOrigin());
+    rect.setPosition(sprite.getPosition());
+    rect.setRotation(sprite.getRotation());
+    rect.setScale(sprite.getScale());
+
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineColor(sf::Color::Red);
+    rect.setOutlineThickness(2.f);
+    this->finestra.draw(rect);
+    ***/
 }
 
-void Campo::aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX, float scalaY) {
+void Campo::aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX, float scalaY, float angolo, int puntoRotaz) {
     int pixX = colonnaToX(posizione.getColonna());
     int pixY = rigaToY(posizione.getRiga());
-    aggiungiImmagine(Punto(pixX, pixY), nomeImmagine, scalaX, scalaY);
+    aggiungiImmagine(Punto(pixX, pixY), nomeImmagine, scalaX, scalaY, angolo, puntoRotaz);
 }
 
 

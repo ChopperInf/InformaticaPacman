@@ -106,12 +106,12 @@ void InterfacciaUtente::aggiungiRettangoloVuotoRigCol(Posizione verticeAltoSinis
 }
 
 
-void InterfacciaUtente::aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX, float scalaY) {
-    campo.aggiungiImmagine(punto, nomeImmagine, scalaX, scalaY);
+void InterfacciaUtente::aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX, float scalaY, float angolo, int puntoRotaz) {
+    campo.aggiungiImmagine(punto, nomeImmagine, scalaX, scalaY, angolo, puntoRotaz);
 }
 
-void InterfacciaUtente::aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX, float scalaY) {
-    campo.aggiungiImmagineRigCol(posizione, nomeImmagine, scalaX, scalaY);
+void InterfacciaUtente::aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX, float scalaY, float angolo, int puntoRotaz) {
+    campo.aggiungiImmagineRigCol(posizione, nomeImmagine, scalaX, scalaY, angolo, puntoRotaz);
 }
 
 void InterfacciaUtente::sleep(int millisecondi) {

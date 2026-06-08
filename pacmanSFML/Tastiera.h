@@ -107,7 +107,7 @@ public:
         int maxVal
     );
 
-    // restituisce il valode dell'ultimo tasto premuto dall'utente
+    // restituisce il valore dell'ultimo tasto premuto dall'utente
     int getUltimoTasto();
     // Restituisce true se è un tasto speciale
     bool isSpeciale();

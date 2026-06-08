@@ -9,6 +9,13 @@ using namespace std;
 const int LARGHEZZA_CELLA = 20;
 const int ALTEZZA_CELLA = 24;
 
+// costanti con valori centro, alto, basso, sinistra, destra
+const int CENTRO = 0;
+const int ALTO = 1;
+const int BASSO = -1;
+const int SINISTRA = -2;
+const int DESTRA = 2;
+
 // ============================================================
 // Palette colori (equivalente Windows Terminal)
 // ============================================================
@@ -165,9 +172,13 @@ public:
         sf::Color colore,
         float spessore = 1.0f);
 
-    void aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX, float scalaY);
-    void aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX, float scalaY);
+	// Immagine (sprite) contenuta nel file nomeImmagine, scalata con scalaX, scalaY
+    // ruotata di angolo rispetto al punto che può essere il centro o
+    // il punto in alto a sinistra.
+    void aggiungiImmagine(Punto punto, string nomeImmagine, float scalaX = 1.0f, float scalaY = 1.0f, float angolo = 0.0f, int puntoRotaz = CENTRO);
+    void aggiungiImmagineRigCol(Posizione posizione, string nomeImmagine, float scalaX = 1.0f, float scalaY = 1.0f, float angolo = 0.0f, int puntoRotaz = CENTRO);
 
+	void ruota(float angoloDeg);
     void cancellaArea(Punto punto,
         int larghezzaPx,
         int altezzaPx);
@@ -204,6 +215,7 @@ private:
 
     int larghezzaPx;
     int altezzaPx;
+	float angoloRotazione;
 
     // ── Helper interni ────────────────────────────────────────
 

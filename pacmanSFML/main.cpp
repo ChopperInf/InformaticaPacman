@@ -56,7 +56,6 @@ int main()
 
     ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME - 4, L"Benvenuto " + nomeGiocatore + L" !");
     ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME - 2, L"Frecce    \u2192  sposta pacman SU/GIU/DESTRA/SINISTRA di 10 px");
-    ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME - 1, L"'a' e 'd' \u2192  accelera/decelera");
     ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME, L"premi ESC per terminare");
     ui.aggiungiTestoAlCentroRigCol(RIGA_DOMANDA_NOME + 1, L"Premi un tasto per iniziare a giocare");
     
